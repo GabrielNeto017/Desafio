@@ -14,8 +14,8 @@ void setup() {
   Serial.begin(9600);
   
   //initialize the led pins
-  pinMode (greenLed , OUTPUT);
-  pinMode (redLed , OUTPUT);
+  pinMode (porta1 , OUTPUT);
+  pinMode (porta2 , OUTPUT);
 
 }
 
