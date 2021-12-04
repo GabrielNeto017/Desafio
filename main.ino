@@ -2,10 +2,12 @@ String nome[5];//array to store
 String senha[5];
 String tipo[5];
 
-int greenLed = 2;
-int redLed = 3;
+int i = 0; //array scan
 
-int i = 0; 
+int porta1 = 2;
+int porta2= 3;
+
+
 
 void setup() {
   // Serial Configuration:
