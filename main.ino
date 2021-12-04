@@ -30,28 +30,46 @@ void loop() {
 
    //read the input
   String selecao = Serial.readString();
-  selecao.trim();// trim to remove the return character
   
- 
   if(selecao=="1"){
  
-      i++;
       Serial.println("Entre com o seu nome: ");
     // wait for user input through serial
       while(Serial.available() == 0);
 
       //read the input
       String id = Serial.readString();
-
-    
       nome[i] = id;
+    
+   	 Serial.println("Defina uma senha: ");
+   	 // wait for user input through serial
+      while(Serial.available() == 0);
+    
+     //read the input
+      String id2 = Serial.readString();
+      senha[i] = id2;
+    
+      i++;
+    
+    
+     while(tipo[i]!= "Padrao" && tipo[i]!="Admin"){
+      
+       Serial.println("Que tipo de usuario voce eh? (Padrao ou  Admin): ");
+    	// wait for user input through serial
+        while(Serial.available() == 0);
+
+       //read the input
+        String id3 = Serial.readString();
+        tipo[i] = id3;
+      Serial.println("" +tipo[i]);
+    }
   }
   
   if(selecao=="2"){
     for(int j =0 ; j<5 ; j++){
 
         Serial.print("" +nome[j]);
-      	Serial.println("" +tipo[j]);
+      	Serial.println(" - " +tipo[j]);
       }
     
   }
