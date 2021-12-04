@@ -1,6 +1,6 @@
-#define porta1 2
-#define porta2 3
-#define botao 4
+#define porta1 3
+#define porta2 4
+#define botao 2
 
 String nome[5];//array to store 
 String senha[5];
@@ -9,6 +9,7 @@ String porta[5];
 
 int i = 0; //array scan
 
+void botaoacionado();
 
 void setup() {
   // Serial Configuration:
@@ -20,23 +21,16 @@ void setup() {
   
   //initialize push button
   pinMode (botao, INPUT_PULLUP);
+  
+  attachInterrupt(digitalPinToInterrupt(botao), botaoacionado, FALLING);
+  
+  
 }
 
 void loop() {
   
   int nameNo;
   bool found = false;
-  
-  
-  //Close Doors
- 
-  if(digitalRead(botao)== LOW){
-    digitalWrite(porta1, HIGH);
-    digitalWrite(porta2, HIGH);
-  }
-  
-  
-  
   
 
   Serial.println("Digite: \n 1 - Para se cadastrar \n 2 - Para consultar a lista de cadastrados \n 3 - Listagem de Eventos \n 4 - Liberar a Porta 1 \n 5 - Liberar a Porta 2");
@@ -45,6 +39,7 @@ void loop() {
 
    //read the input
   String selecao = Serial.readString();
+  Serial.println("");
   
   if(selecao=="1"){
  
@@ -94,13 +89,13 @@ void loop() {
   
   if(selecao=="3"){
     
-    Serial.println("Nome do Usuario: ");
+    Serial.print("Nome do Usuario: ");
   	// wait for user input through serial
   	while(Serial.available() == 0);
 
   	//read the input
  	String verificacao = Serial.readString();
-    Serial.print(verificacao);
+    Serial.println(verificacao);
     
     for(int k =0 ; k<5 ; k++){
       	if (verificacao == nome[k]){
@@ -118,13 +113,14 @@ void loop() {
     
     else if(tipo[nameNo]=="Admin"){
       
-     	Serial.println("Entre com a senha: ");
+     	Serial.print("Entre com a senha: ");
   		// wait for user input through serial
   		while(Serial.available() == 0);
 
   		//read the input
  		String verificacao2 = Serial.readString();
-     	Serial.print(verificacao2);
+     	Serial.println(verificacao2);
+      	
       
         if(senha[nameNo]!=verificacao2){
           
@@ -157,7 +153,7 @@ void loop() {
     //read the input
   String verificacao = Serial.readString();
     Serial.print(verificacao);
-    Serial.println("");
+    Serial.println(" ");
     
     for(int k =0 ; k<5 ; k++){
         if (verificacao == nome[k]){
@@ -167,13 +163,14 @@ void loop() {
     }
     
     if(found){
-    Serial.println("Entre com a senha: ");
+    Serial.print("Entre com a senha: ");
     // wait for user input through serial
     while(Serial.available() == 0);
 
     //read the input
     String verificacao3 = Serial.readString();
     Serial.print(verificacao3);
+    Serial.println("");
       
     if(senha[nameNo]!=verificacao3){
           
@@ -182,7 +179,8 @@ void loop() {
     }
       
     else if(senha[nameNo]==verificacao3){
-      
+     
+    porta[nameNo] = "Porta1";
     Serial.println("Abrir Porta 1? 1 - SIM  ou 2 - NAO");
    // wait for user input through serial
       while(Serial.available() == 0);
@@ -195,6 +193,7 @@ void loop() {
         digitalWrite(porta1 , HIGH);
         Serial.println("Porta1 Liberada");
         delay(5000);
+        digitalWrite(porta1 , LOW);
       }
     }
       
@@ -210,24 +209,26 @@ void loop() {
     while(Serial.available() == 0);
 
     //read the input
-  String verificacao = Serial.readString();
-    Serial.print(verificacao);
+  String verificacao6 = Serial.readString();
+  Serial.print(verificacao6);
        Serial.println("");
     
     for(int k =0 ; k<5 ; k++){
-        if (verificacao == nome[k]){
+        if (verificacao6 == nome[k]){
             found = true;
             nameNo = k;
       }
     }
     
-    Serial.println("Entre com a senha: ");
+    if(found){
+    Serial.print("Entre com a senha: ");
     // wait for user input through serial
     while(Serial.available() == 0);
 
     //read the input
     String verificacao3 = Serial.readString();
     Serial.print(verificacao3);
+    Serial.println("");
       
     if(senha[nameNo]!=verificacao3){
           
@@ -237,6 +238,7 @@ void loop() {
       
     else if(senha[nameNo]==verificacao3){
       
+    porta[nameNo] = "Porta2";
     Serial.println("Abrir Porta 1? 1 - SIM  ou 2 - NAO");
    // wait for user input through serial
       while(Serial.available() == 0);
@@ -249,8 +251,9 @@ void loop() {
         digitalWrite(porta2 , HIGH); 
         Serial.println("Porta2 Liberada");
         delay(5000);
+        digitalWrite(porta2 , LOW);
       }
-      
+    }
       
      }
   
@@ -258,4 +261,14 @@ void loop() {
  }
 }
 
+
+void botaoacionado(){
   
+  //Close Doors
+ 
+  if(digitalRead(botao)== LOW){
+    digitalWrite(porta1, LOW);
+    digitalWrite(porta2, LOW);
+  }
+}
+
